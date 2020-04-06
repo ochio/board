@@ -1,8 +1,15 @@
 import React, {useState} from 'react'
+import { connect } from 'react-redux'
+import { createProject } from '../../store/actions/projectActions'
 
-const CreateProject:React.FC = () => {
+
+const CreateProject:React.FC = (props) => {
 	const [title, setTitle] = useState<string>('')
 	const [content, setContent] = useState<string>('')
+	const state = {
+		title: title,
+		content: content
+	}
 	
 	const handleTitleChange = (e:React.FormEvent<HTMLInputElement>) => {
 		setTitle(e.target.value)
@@ -14,7 +21,7 @@ const CreateProject:React.FC = () => {
 
 	const handleSubmit = (e:React.FormEvent<HTMLInputElement>) => {
 		e.preventDefault()
-		console.log(title,content);
+		props.createProjct(state)
 	}
 
 	return(
@@ -37,4 +44,10 @@ const CreateProject:React.FC = () => {
 	)
 }
 
-export default CreateProject
+const mapDispatchToProps = (dispatch) => {
+	return {
+		createProjct: (project) => dispatch(createProject(project))
+	}
+}
+
+export default connect(null,mapDispatchToProps)(CreateProject)

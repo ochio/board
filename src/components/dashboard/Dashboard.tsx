@@ -5,13 +5,12 @@ import { connect } from 'react-redux'
 import { firestoreConnect } from 'react-redux-firebase'
 import { compose } from "redux"
 
-import { Projects } from '../../store/types'
-import { store } from '../../index'
+// import { Projects } from '../../store/types'
+import { Redirect } from 'react-router-dom'
 
-type AllState = ReturnType<typeof store.getState>
-
-const Dashboard:React.FC = (props: Projects) => {
-	const { projects } = props
+const Dashboard:React.FC = (props) => {
+	const { projects, auth } = props
+	if (!auth.uid) return <Redirect to="/signin" />
 	return(
 		<div className="dashboard container">
 			<div className="row">
@@ -26,9 +25,10 @@ const Dashboard:React.FC = (props: Projects) => {
 	)
 }
 
-const mapStateToProps = (state: AllState) => {
+const mapStateToProps = (state) => {
 	return {
-		projects: state.firestore.ordered.projects
+		projects: state.firestore.ordered.projects,
+		auth: state.firebase.auth
 	}
 }
 
